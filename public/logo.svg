@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         viewBox="0 0 30 30" style="enable-background:new 0 0 30 30;" xml:space="preserve">
+<defs>
+  <style type="text/css">
+    .building{fill:#2563eb;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10;}
+    .roof{fill:#1d4ed8;}
+    .door{fill:#fbbf24;}
+    .window{fill:#60a5fa;}
+    .text{fill:#ffffff;font-family:Arial, sans-serif;font-size:3px;font-weight:bold;}
+    
+    .logo-breathe {
+      animation: breathe 3s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+  </style>
+</defs>
+
+<!-- Background circle -->
+<circle cx="15" cy="15" r="14" fill="#f0f9ff" stroke="#2563eb" stroke-width="1"/>
+
+<!-- School building -->
+<g class="logo-breathe">
+  <!-- Main building -->
+  <rect class="building" x="8" y="12" width="14" height="12" rx="1"/>
+  
+  <!-- Roof -->
+  <polygon class="roof" points="6,12 15,6 24,12"/>
+  
+  <!-- Door -->
+  <rect class="door" x="13" y="17" width="4" height="7" rx="0.5"/>
+  
+  <!-- Windows -->
+  <rect class="window" x="9.5" y="14" width="2.5" height="2.5" rx="0.3"/>
+  <rect class="window" x="18" y="14" width="2.5" height="2.5" rx="0.3"/>
+  <rect class="window" x="9.5" y="18.5" width="2.5" height="2.5" rx="0.3"/>
+  <rect class="window" x="18" y="18.5" width="2.5" height="2.5" rx="0.3"/>
+  
+  <!-- Flag pole -->
+  <rect x="20" y="4" width="0.5" height="8" fill="#64748b"/>
+  
+  <!-- Flag -->
+  <polygon points="20.5,4 26,6 20.5,8" fill="#dc2626"/>
+</g>
+
+<!-- Small text "VWB" at bottom -->
+<text class="text" x="15" y="27" text-anchor="middle">VWB</text>
+</svg>
