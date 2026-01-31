@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
+import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -161,20 +162,25 @@ function HomeContent() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await fetch('/api/auth/callback/credentials', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          redirect: false,
-        }),
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       })
       
-      if (response.ok) {
-        setIsAuthenticated(true)
+      if (result?.ok) {
+        // Login successful, check auth status again
+        const authResponse = await fetch('/api/auth/session')
+        const session = await authResponse.json()
+        if (session.user) {
+          setIsAuthenticated(true)
+          // Fetch school data
+          const schoolResponse = await fetch('/api/school/current')
+          if (schoolResponse.ok) {
+            const schoolData = await schoolResponse.json()
+            setSchool(schoolData)
+          }
+        }
       } else {
         alert('Invalid credentials')
       }
