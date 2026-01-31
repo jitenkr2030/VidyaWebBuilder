@@ -1,0 +1,25 @@
+{
+  "buildCommand": "bun run build",
+  "outputDirectory": ".next/standalone",
+  "framework": "nextjs",
+  "env": {
+    "NEXTAUTH_URL": "@next-auth-url",
+    "NEXTAUTH_SECRET": "@next-auth-secret"
+  },
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, must-revalidate"
+        }
+      ]
+    }
+  ]
+}

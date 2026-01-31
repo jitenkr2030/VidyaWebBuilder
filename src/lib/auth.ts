@@ -13,38 +13,47 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.log('Missing credentials')
           return null
         }
 
-        const user = await db.user.findUnique({
-          where: {
-            email: credentials.email
-          },
-          include: {
-            school: true
+        try {
+          const user = await db.user.findUnique({
+            where: {
+              email: credentials.email
+            },
+            include: {
+              school: true
+            }
+          })
+
+          if (!user) {
+            console.log('User not found:', credentials.email)
+            return null
           }
-        })
 
-        if (!user) {
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          )
+
+          if (!isPasswordValid) {
+            console.log('Invalid password for user:', credentials.email)
+            return null
+          }
+
+          console.log('User authenticated successfully:', credentials.email)
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            schoolId: user.schoolId,
+            school: user.school
+          }
+        } catch (error) {
+          console.error('Authentication error:', error)
           return null
-        }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        )
-
-        if (!isPasswordValid) {
-          return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          schoolId: user.schoolId,
-          school: user.school
         }
       }
     })
@@ -72,6 +81,7 @@ export const authOptions: NextAuthOptions = {
     }
   },
   pages: {
-    signIn: "/auth/signin"
-  }
+    signIn: "/"
+  },
+  debug: process.env.NODE_ENV === "development",
 }
