@@ -1,0 +1,541 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "sqlite"
+  url       = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  password    String
+  role        UserRole @default(VIEWER)
+  schoolId    String?
+  school      School?  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model School {
+  id                String            @id @default(cuid())
+  name              String
+  subdomain         String            @unique
+  customDomain      String?           @unique
+  logo              String?
+  favicon           String?
+  primaryColor      String            @default("#2563eb")
+  secondaryColor    String            @default("#64748b")
+  template          String            @default("default")
+  templateId        String?
+  templateObj       Template?         @relation("SchoolTemplate", fields: [templateId], references: [id])
+  language          Language          @default(ENGLISH)
+  status            SchoolStatus      @default(DRAFT)
+  plan              SubscriptionPlan @default(FREE)
+  subscriptionEnds  DateTime?
+  seoTitle          String?
+  seoDescription    String?
+  address           String?
+  phone             String?
+  email             String?
+  whatsapp          String?
+  mapEmbed          String?
+  users             User[]
+  websiteSections   WebsiteSection[]
+  notices           Notice[]
+  admissions        Admission[]
+  galleries         Gallery[]
+  staff             Staff[]
+  pages             Page[]
+  achievements      Achievement[]
+  contacts          Contact[]
+  subscriptions     Subscription[]
+  payments          Payment[]
+  featureFlags      FeatureFlag[]
+  sslCertificates   SslCertificate[]
+  uptimeMonitors    UptimeMonitor[]
+  renewalReminders  RenewalReminder[]
+  domainTransfers   DomainTransfer[]
+  dnsRecords        DnsRecord[]
+  whoisPrivacy      WhoisPrivacy[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model WebsiteSection {
+  id          String           @id @default(cuid())
+  schoolId    String
+  school      School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  type        SectionType
+  title       String
+  content     String?          // JSON content for rich text
+  imageUrl    String?
+  order       Int
+  isVisible   Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Notice {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  content     String
+  isImportant Boolean  @default(false)
+  expiryDate  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Admission {
+  id          String             @id @default(cuid())
+  schoolId    String
+  school      School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  session     String
+  isOpen      Boolean            @default(true)
+  instructions String?
+  eligibility String?
+  enquiries   AdmissionEnquiry[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model AdmissionEnquiry {
+  id         String   @id @default(cuid())
+  admissionId String
+  admission  Admission @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+  studentName String
+  parentName  String
+  phone       String
+  email       String?
+  grade       String?
+  message     String?
+  status      EnquiryStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Gallery {
+  id          String     @id @default(cuid())
+  schoolId    String
+  school      School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  eventDate   DateTime?
+  images      GalleryImage[]
+  order       Int
+  isVisible   Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  galleryId String
+  gallery   Gallery  @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  url       String
+  caption   String?
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Staff {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name        String
+  designation String
+  department  String?
+  subject     String?
+  email       String?
+  phone       String?
+  photo       String?
+  bio         String?
+  isVisible   Boolean  @default(true)
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Page {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  slug        String
+  content     String?  // JSON content for rich text
+  metaTitle   String?
+  metaDesc    String?
+  isVisible   Boolean  @default(true)
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  imageUrl    String?
+  date        DateTime?
+  isVisible   Boolean  @default(true)
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  status    ContactStatus @default(NEW)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Template {
+  id          String           @id @default(cuid())
+  name        String
+  description String
+  category    TemplateCategory
+  previewUrl  String?
+  isPremium   Boolean          @default(false)
+  schools     School[]         @relation("SchoolTemplate")
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Subscription {
+  id              String            @id @default(cuid())
+  schoolId        String
+  school          School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  plan            SubscriptionPlan
+  status          SubscriptionStatus @default(ACTIVE)
+  startDate       DateTime          @default(now())
+  endDate         DateTime
+  amount          Int
+  currency        String            @default("INR")
+  paymentId       String?
+  paymentMethod   String?
+  autoRenew       Boolean           @default(false)
+  features        String?           // JSON string of enabled features
+  payments        Payment[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model Payment {
+  id            String          @id @default(cuid())
+  schoolId      String
+  school        School          @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  subscriptionId String?
+  subscription  Subscription?   @relation(fields: [subscriptionId], references: [id])
+  amount        Int
+  currency      String          @default("INR")
+  status        PaymentStatus   @default(PENDING)
+  method        String?
+  transactionId String?
+  razorpayOrderId    String?
+  razorpayPaymentId  String?
+  razorpaySignature  String?
+  description  String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+model FeatureFlag {
+  id          String  @id @default(cuid())
+  schoolId    String
+  feature     String
+  isEnabled   Boolean @default(false)
+  school      School  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([schoolId, feature])
+}
+
+model SslCertificate {
+  id              String      @id @default(cuid())
+  schoolId        String
+  school          School      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  domain          String
+  certificatePath String?
+  privateKeyPath  String?
+  issuer          String?
+  issuedAt        DateTime?
+  expiresAt       DateTime?
+  status          SslStatus   @default(PENDING)
+  autoRenew       Boolean     @default(true)
+  lastRenewedAt   DateTime?
+  renewalError    String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model UptimeMonitor {
+  id            String              @id @default(cuid())
+  schoolId      String
+  school        School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  url           String
+  status        MonitorStatus       @default(ACTIVE)
+  checkInterval Int                 @default(300) // 5 minutes
+  timeout       Int                 @default(30)  // 30 seconds
+  lastChecked   DateTime?
+  isUp          Boolean?
+  responseTime  Int?                // in milliseconds
+  uptime        Float               @default(0) // percentage
+  totalChecks   Int                 @default(0)
+  successfulChecks Int              @default(0)
+  alerts        UptimeAlert[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+}
+
+model UptimeAlert {
+  id              String        @id @default(cuid())
+  monitorId       String
+  monitor         UptimeMonitor @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  type            AlertType
+  threshold       Int?          // threshold for alert (e.g., 5 consecutive failures)
+  consecutiveFails Int          @default(0)
+  isTriggered     Boolean       @default(false)
+  lastTriggeredAt DateTime?
+  resolvedAt      DateTime?
+  emailSent       Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model RenewalReminder {
+  id              String              @id @default(cuid())
+  schoolId        String
+  school          School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  type            ReminderType
+  scheduledFor    DateTime
+  sentAt          DateTime?
+  email           String
+  subject         String
+  content         String
+  status          ReminderStatus      @default(PENDING)
+  sendAttempts    Int                 @default(0)
+  lastAttemptAt   DateTime?
+  errorMessage    String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+}
+
+model DomainTransfer {
+  id              String            @id @default(cuid())
+  schoolId        String
+  school          School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  domain          String
+  currentRegistrar String
+  authCode        String?
+  transferStatus  TransferStatus    @default(PENDING)
+  initiatedAt     DateTime          @default(now())
+  completedAt     DateTime?
+  expiryDate      DateTime?
+  autoRenew       Boolean           @default(false)
+  privacyProtection Boolean         @default(false)
+  lockStatus      Boolean           @default(true)
+  adminEmail      String
+  adminPhone      String?
+  transferNotes   String?
+  dnsRecords      DnsRecord[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model DnsRecord {
+  id              String      @id @default(cuid())
+  domainTransferId String?
+  domainTransfer   DomainTransfer? @relation(fields: [domainTransferId], references: [id], onDelete: Cascade)
+  schoolId        String
+  school          School      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  type            DnsType
+  name            String
+  value           String
+  ttl             Int         @default(3600)
+  priority        Int?        // For MX records
+  isActive        Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model WhoisPrivacy {
+  id              String            @id @default(cuid())
+  schoolId        String
+  school          School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  domain          String            @unique
+  isEnabled       Boolean           @default(false)
+  privacyProvider String?
+  expiryDate      DateTime?
+  autoRenew       Boolean           @default(false)
+  maskedEmail     String?
+  maskedPhone     String?
+  maskedAddress   String?
+  status          PrivacyStatus     @default(DISABLED)
+  lastUpdated     DateTime          @default(now())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum TemplateCategory {
+  GOVERNMENT
+  PRIVATE
+  CBSE
+  ICSE
+  RURAL
+  COACHING
+}
+
+enum SchoolStatus {
+  DRAFT
+  PUBLISHED
+  SUSPENDED
+}
+
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  STANDARD
+  PREMIUM
+}
+
+enum Language {
+  ENGLISH
+  HINDI
+  BILINGUAL
+}
+
+enum SectionType {
+  HERO
+  ABOUT
+  ACADEMICS
+  FACILITIES
+  GALLERY
+  STAFF
+  ACHIEVEMENTS
+  CONTACT
+  CUSTOM
+}
+
+enum EnquiryStatus {
+  PENDING
+  CONTACTED
+  CONVERTED
+  CLOSED
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  REPLIED
+  CLOSED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  PENDING
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum SslStatus {
+  PENDING
+  ACTIVE
+  EXPIRING
+  EXPIRED
+  ERROR
+  REVOKED
+}
+
+enum MonitorStatus {
+  ACTIVE
+  PAUSED
+  DISABLED
+}
+
+enum AlertType {
+  DOWN
+  SLOW_RESPONSE
+  UPTIME_LOW
+  ERROR
+}
+
+enum ReminderType {
+  SUBSCRIPTION_EXPIRING
+  SUBSCRIPTION_EXPIRED
+  SSL_EXPIRING
+  SSL_EXPIRED
+  DOMAIN_EXPIRING
+  DOMAIN_EXPIRED
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum TransferStatus {
+  PENDING
+  PROCESSING
+  AWAITING_APPROVAL
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum DnsType {
+  A
+  AAAA
+  CNAME
+  MX
+  TXT
+  NS
+  SRV
+  CAA
+  PTR
+}
+
+enum PrivacyStatus {
+  ACTIVE
+  DISABLED
+  ACTIVATING
+  RENEWING
+  ERROR
+  EXPIRED
+}
