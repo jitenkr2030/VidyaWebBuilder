@@ -325,22 +325,30 @@ function HomeContent() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b">
+        <header className="bg-white shadow-sm border-b sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <div className="flex items-center space-x-3">
-                <School className="h-8 w-8 text-blue-600" />
-                <h1 className="text-2xl font-bold text-gray-900">VidyaWebBuilder</h1>
-                <Badge variant="secondary">Dashboard</Badge>
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <School className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
+                <h1 className="text-lg sm:text-2xl font-bold text-gray-900">VidyaWebBuilder</h1>
+                <Badge variant="secondary" className="hidden sm:inline-flex">Dashboard</Badge>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 sm:space-x-4">
                 <LanguageSwitcher />
-                <Button variant="outline" size="sm">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
-                </Button>
-                <Button variant="outline" size="sm">
-                  Logout
+                <div className="hidden sm:flex items-center space-x-2">
+                  <Button variant="outline" size="sm">
+                    <Settings className="h-4 w-4 mr-2" />
+                    <span className="hidden lg:inline">Settings</span>
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    Logout
+                  </Button>
+                </div>
+                {/* Mobile menu button */}
+                <Button variant="outline" size="sm" className="sm:hidden">
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
                 </Button>
               </div>
             </div>
@@ -348,33 +356,34 @@ function HomeContent() {
         </header>
 
         {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
           {/* Welcome Section */}
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
               {t('welcomeTitle')}
             </h2>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               {t('welcomeSubtitle')}
             </p>
           </div>
 
           {/* Quick Actions Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Layout className="h-6 w-6 text-blue-600" />
-                  <CardTitle className="text-lg">Website Builder</CardTitle>
+                  <Layout className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                  <CardTitle className="text-base sm:text-lg">Website Builder</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Design and customize your school website
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" onClick={() => setCurrentView('builder')}>
-                  <Zap className="h-4 w-4 mr-2" />
-                  Open Builder
+                <Button className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('builder')}>
+                  <Zap className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Open Builder</span>
+                  <span className="sm:hidden">Builder</span>
                 </Button>
               </CardContent>
             </Card>
@@ -382,16 +391,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Megaphone className="h-6 w-6 text-green-600" />
-                  <CardTitle className="text-lg">Notice Board</CardTitle>
+                  <Megaphone className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                  <CardTitle className="text-base sm:text-lg">Notice Board</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Publish important notices and announcements
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('notices')}>
-                  Manage Notices
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('notices')}>
+                  <span className="hidden sm:inline">Manage Notices</span>
+                  <span className="sm:hidden">Notices</span>
                 </Button>
               </CardContent>
             </Card>
@@ -399,16 +409,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <GraduationCap className="h-6 w-6 text-purple-600" />
-                  <CardTitle className="text-lg">Admissions</CardTitle>
+                  <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+                  <CardTitle className="text-base sm:text-lg">Admissions</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Handle admission enquiries and applications
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('admissions')}>
-                  View Enquiries
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('admissions')}>
+                  <span className="hidden sm:inline">View Enquiries</span>
+                  <span className="sm:hidden">Enquiries</span>
                 </Button>
               </CardContent>
             </Card>
@@ -416,16 +427,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Image className="h-6 w-6 text-orange-600" />
-                  <CardTitle className="text-lg">Photo Gallery</CardTitle>
+                  <Image className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
+                  <CardTitle className="text-base sm:text-lg">Photo Gallery</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Showcase school events and activities
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('gallery')}>
-                  Manage Gallery
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('gallery')}>
+                  <span className="hidden sm:inline">Manage Gallery</span>
+                  <span className="sm:hidden">Gallery</span>
                 </Button>
               </CardContent>
             </Card>
@@ -433,16 +445,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Users className="h-6 w-6 text-red-600" />
-                  <CardTitle className="text-lg">Staff Directory</CardTitle>
+                  <Users className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
+                  <CardTitle className="text-base sm:text-lg">Staff Directory</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Manage teacher profiles and information
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('staff')}>
-                  Manage Staff
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('staff')}>
+                  <span className="hidden sm:inline">Manage Staff</span>
+                  <span className="sm:hidden">Staff</span>
                 </Button>
               </CardContent>
             </Card>
@@ -450,16 +463,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <BookOpen className="h-6 w-6 text-teal-600" />
-                  <CardTitle className="text-lg">Academics</CardTitle>
+                  <BookOpen className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
+                  <CardTitle className="text-base sm:text-lg">Academics</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Create academic pages and content
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('academics')}>
-                  Manage Pages
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('academics')}>
+                  <span className="hidden sm:inline">Manage Pages</span>
+                  <span className="sm:hidden">Pages</span>
                 </Button>
               </CardContent>
             </Card>
@@ -467,36 +481,38 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Palette className="h-6 w-6 text-pink-600" />
-                  <CardTitle className="text-lg">Templates</CardTitle>
+                  <Palette className="h-5 w-5 sm:h-6 sm:w-6 text-pink-600" />
+                  <CardTitle className="text-base sm:text-lg">Templates</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Choose from school-specific templates
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('templates')}>
-                  Browse Templates
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('templates')}>
+                  <span className="hidden sm:inline">Browse Templates</span>
+                  <span className="sm:hidden">Templates</span>
                 </Button>
               </CardContent>
             </Card>
           </div>
 
           {/* Second Row - Additional Features */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Phone className="h-6 w-6 text-green-600" />
-                  <CardTitle className="text-lg">Contact & Messages</CardTitle>
+                  <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                  <CardTitle className="text-base sm:text-lg">Contact & Messages</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Manage parent enquiries and communications
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('contact')}>
-                  View Messages
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('contact')}>
+                  <span className="hidden sm:inline">View Messages</span>
+                  <span className="sm:hidden">Messages</span>
                 </Button>
               </CardContent>
             </Card>
@@ -504,17 +520,18 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Globe className="h-6 w-6 text-blue-600" />
-                  <CardTitle className="text-lg">Public Website</CardTitle>
+                  <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                  <CardTitle className="text-base sm:text-lg">Public Website</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   View your school's public website
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full">
-                  <Eye className="h-4 w-4 mr-2" />
-                  Visit Site
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm">
+                  <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Visit Site</span>
+                  <span className="sm:hidden">Site</span>
                 </Button>
               </CardContent>
             </Card>
@@ -522,16 +539,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Search className="h-6 w-6 text-purple-600" />
-                  <CardTitle className="text-lg">SEO & Visibility</CardTitle>
+                  <Search className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+                  <CardTitle className="text-base sm:text-lg">SEO & Visibility</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Optimize for search engines
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('seo')}>
-                  Manage SEO
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('seo')}>
+                  <span className="hidden sm:inline">Manage SEO</span>
+                  <span className="sm:hidden">SEO</span>
                 </Button>
               </CardContent>
             </Card>
@@ -539,16 +557,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-blue-200 bg-blue-50">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <CreditCard className="h-6 w-6 text-blue-600" />
-                  <CardTitle className="text-lg">Subscription Plans</CardTitle>
+                  <CreditCard className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                  <CardTitle className="text-base sm:text-lg">Subscription Plans</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Upgrade to unlock premium features
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => setCurrentView('subscription')}>
-                  View Plans
+                <Button className="w-full h-9 sm:h-10 text-sm bg-blue-600 hover:bg-blue-700" onClick={() => setCurrentView('subscription')}>
+                  <span className="hidden sm:inline">View Plans</span>
+                  <span className="sm:hidden">Plans</span>
                 </Button>
               </CardContent>
             </Card>
@@ -556,16 +575,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Globe className="h-6 w-6 text-green-600" />
-                  <CardTitle className="text-lg">Custom Domain</CardTitle>
+                  <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                  <CardTitle className="text-base sm:text-lg">Custom Domain</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Configure your professional domain
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('domain')}>
-                  Manage Domain
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('domain')}>
+                  <span className="hidden sm:inline">Manage Domain</span>
+                  <span className="sm:hidden">Domain</span>
                 </Button>
               </CardContent>
             </Card>
@@ -573,16 +593,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Shield className="h-6 w-6 text-green-600" />
-                  <CardTitle className="text-lg">SSL Certificates</CardTitle>
+                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                  <CardTitle className="text-base sm:text-lg">SSL Certificates</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Manage SSL certificates for secure connections
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('ssl')}>
-                  Manage SSL
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('ssl')}>
+                  <span className="hidden sm:inline">Manage SSL</span>
+                  <span className="sm:hidden">SSL</span>
                 </Button>
               </CardContent>
             </Card>
@@ -590,16 +611,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Activity className="h-6 w-6 text-orange-600" />
-                  <CardTitle className="text-lg">Uptime Monitoring</CardTitle>
+                  <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
+                  <CardTitle className="text-base sm:text-lg">Uptime Monitoring</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Monitor website availability and performance
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('monitoring')}>
-                  View Monitors
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('monitoring')}>
+                  <span className="hidden sm:inline">View Monitors</span>
+                  <span className="sm:hidden">Monitors</span>
                 </Button>
               </CardContent>
             </Card>
@@ -607,16 +629,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Bell className="h-6 w-6 text-purple-600" />
-                  <CardTitle className="text-lg">Renewal Reminders</CardTitle>
+                  <Bell className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+                  <CardTitle className="text-base sm:text-lg">Renewal Reminders</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Automated notifications for renewals
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('reminders')}>
-                  Manage Reminders
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('reminders')}>
+                  <span className="hidden sm:inline">Manage Reminders</span>
+                  <span className="sm:hidden">Reminders</span>
                 </Button>
               </CardContent>
             </Card>
@@ -625,16 +648,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Globe className="h-6 w-6 text-indigo-600" />
-                  <CardTitle className="text-lg">Domain Transfers</CardTitle>
+                  <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-indigo-600" />
+                  <CardTitle className="text-base sm:text-lg">Domain Transfers</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Transfer existing domains to VidyaWebBuilder
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('transfers')}>
-                  Manage Transfers
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('transfers')}>
+                  <span className="hidden sm:inline">Manage Transfers</span>
+                  <span className="sm:hidden">Transfers</span>
                 </Button>
               </CardContent>
             </Card>
@@ -643,16 +667,17 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Settings className="h-6 w-6 text-orange-600" />
-                  <CardTitle className="text-lg">DNS Management</CardTitle>
+                  <Settings className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
+                  <CardTitle className="text-base sm:text-lg">DNS Management</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Advanced DNS record management
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('dns')}>
-                  Manage DNS
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('dns')}>
+                  <span className="hidden sm:inline">Manage DNS</span>
+                  <span className="sm:hidden">DNS</span>
                 </Button>
               </CardContent>
             </Card>
@@ -661,87 +686,89 @@ function HomeContent() {
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-2">
-                  <Shield className="h-6 w-6 text-pink-600" />
-                  <CardTitle className="text-lg">WHOIS Privacy</CardTitle>
+                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-pink-600" />
+                  <CardTitle className="text-base sm:text-lg">WHOIS Privacy</CardTitle>
                 </div>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Protect your personal information
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('privacy')}>
-                  Manage Privacy
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('privacy')}>
+                  <span className="hidden sm:inline">Manage Privacy</span>
+                  <span className="sm:hidden">Privacy</span>
                 </Button>
               </CardContent>
             </Card>
           </div>
 
-          {/* Stats Overview */}
-          <div className="md:col-span-2 space-y-4">
-            <Card>
-              <CardHeader>
+          {/* Admin Panel */}
+          <div className="mb-6 sm:mb-8">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-gray-200 bg-gray-50">
+              <CardHeader className="pb-3">
                 <CardTitle className="flex items-center space-x-2">
-                  <Users className="h-5 w-5" />
-                  <span>Admin Panel</span>
+                  <Users className="h-5 w-5 text-gray-600" />
+                  <span className="text-base sm:text-lg">Admin Panel</span>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Manage users and system settings
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full" onClick={() => setCurrentView('users')}>
-                  Manage Users
+                <Button variant="outline" className="w-full h-9 sm:h-10 text-sm" onClick={() => setCurrentView('users')}>
+                  <span className="hidden sm:inline">Manage Users</span>
+                  <span className="sm:hidden">Users</span>
                 </Button>
               </CardContent>
             </Card>
           </div>
 
           {/* Stats Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Website Status</p>
-                    <p className="text-2xl font-bold text-green-600">Published</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-600">Website Status</p>
+                    <p className="text-xl sm:text-2xl font-bold text-green-600">Published</p>
                   </div>
-                  <CheckCircle className="h-8 w-8 text-green-600" />
+                  <CheckCircle className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Active Notices</p>
-                    <p className="text-2xl font-bold">5</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-600">Active Notices</p>
+                    <p className="text-xl sm:text-2xl font-bold">5</p>
                   </div>
-                  <Calendar className="h-8 w-8 text-blue-600" />
+                  <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Admission Enquiries</p>
-                    <p className="text-2xl font-bold">12</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-600">Admission Enquiries</p>
+                    <p className="text-xl sm:text-2xl font-bold">12</p>
                   </div>
-                  <FileText className="h-8 w-8 text-purple-600" />
+                  <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Gallery Photos</p>
-                    <p className="text-2xl font-bold">48</p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-600">Gallery Photos</p>
+                    <p className="text-xl sm:text-2xl font-bold">48</p>
                   </div>
-                  <Image className="h-8 w-8 text-orange-600" />
+                  <Image className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600" />
                 </div>
               </CardContent>
             </Card>

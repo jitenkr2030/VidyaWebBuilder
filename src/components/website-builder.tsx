@@ -207,48 +207,59 @@ export default function WebsiteBuilder() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" onClick={() => window.history.back()}>
-                ← Back
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Button variant="ghost" size="sm" onClick={() => window.history.back()}>
+                <ArrowUp className="h-4 w-4 rotate-270" />
+                <span className="hidden sm:inline ml-2">Back</span>
               </Button>
-              <h1 className="text-xl font-semibold">Website Builder</h1>
+              <h1 className="text-lg sm:text-xl font-semibold">Website Builder</h1>
               {school && (
-                <Badge variant={school.status === 'PUBLISHED' ? 'default' : 'secondary'}>
+                <Badge variant={school.status === 'PUBLISHED' ? 'default' : 'secondary'} className="text-xs">
                   {school.status}
                 </Badge>
               )}
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {/* View Mode Toggle */}
-              <div className="flex items-center space-x-2 border rounded-lg p-1">
+              <div className="flex items-center space-x-1 border rounded-lg p-1">
                 <Button
                   variant={previewMode === 'desktop' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setPreviewMode('desktop')}
+                  className="h-8 w-8 p-0"
                 >
-                  <Monitor className="h-4 w-4" />
+                  <Monitor className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
                 <Button
                   variant={previewMode === 'mobile' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setPreviewMode('mobile')}
+                  className="h-8 w-8 p-0"
                 >
-                  <Smartphone className="h-4 w-4" />
+                  <Smartphone className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </div>
 
               {/* Action Buttons */}
-              <Button variant="outline" onClick={() => setActiveTab('settings')}>
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
-              </Button>
-              <Button onClick={publishWebsite}>
-                <Globe className="h-4 w-4 mr-2" />
-                Publish Website
+              <div className="hidden sm:flex items-center space-x-2">
+                <Button variant="outline" size="sm" onClick={() => setActiveTab('settings')}>
+                  <Settings className="h-4 w-4 mr-2" />
+                  <span className="hidden lg:inline">Settings</span>
+                </Button>
+                <Button size="sm" onClick={publishWebsite}>
+                  <Globe className="h-4 w-4 mr-2" />
+                  <span className="hidden lg:inline">Publish</span>
+                  <span className="lg:hidden">Go</span>
+                </Button>
+              </div>
+
+              {/* Mobile menu button */}
+              <Button variant="outline" size="sm" className="sm:hidden" onClick={publishWebsite}>
+                <Globe className="h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -256,28 +267,29 @@ export default function WebsiteBuilder() {
       </header>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Builder Panel */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="xl:col-span-1 space-y-4 sm:space-y-6">
             {/* Add Section */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Plus className="h-5 w-5" />
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                  <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span>Add Section</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-2 sm:space-y-3">
                 {['HERO', 'ABOUT', 'ACADEMICS', 'FACILITIES', 'GALLERY', 'STAFF', 'ACHIEVEMENTS', 'CONTACT'].map(type => (
                   <Button
                     key={type}
                     variant="outline"
-                    className="w-full justify-start"
+                    className="w-full justify-start h-8 sm:h-10 text-xs sm:text-sm"
                     onClick={() => addNewSection(type)}
                   >
-                    <Layout className="h-4 w-4 mr-2" />
-                    {type.charAt(0) + type.slice(1).toLowerCase()}
+                    <Layout className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">{type.charAt(0) + type.slice(1).toLowerCase()}</span>
+                    <span className="sm:hidden">{type.slice(0, 4)}</span>
                   </Button>
                 ))}
               </CardContent>
@@ -285,77 +297,84 @@ export default function WebsiteBuilder() {
 
             {/* Sections List */}
             <Card>
-              <CardHeader>
-                <CardTitle>Website Sections</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base sm:text-lg">Website Sections</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-2 sm:space-y-3 max-h-96 overflow-y-auto">
                 {sections.map((section, index) => (
-                  <div key={section.id} className="border rounded-lg p-3 space-y-2">
+                  <div key={section.id} className="border rounded-lg p-2 sm:p-3 space-y-2">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Layout className="h-4 w-4 text-gray-500" />
-                        <span className="font-medium text-sm">{section.title}</span>
+                      <div className="flex items-center space-x-1 sm:space-x-2 min-w-0 flex-1">
+                        <Layout className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+                        <span className="font-medium text-xs sm:text-sm truncate">{section.title}</span>
                       </div>
-                      <div className="flex items-center space-x-1">
+                      <div className="flex items-center space-x-1 flex-shrink-0">
                         <Button
                           variant="ghost"
                           size="sm"
+                          className="h-6 w-6 sm:h-8 sm:w-8 p-0"
                           onClick={() => moveSection(section.id, 'up')}
                           disabled={index === 0}
                         >
-                          <ArrowUp className="h-3 w-3" />
+                          <ArrowUp className="h-2 w-2 sm:h-3 sm:w-3" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
+                          className="h-6 w-6 sm:h-8 sm:w-8 p-0"
                           onClick={() => moveSection(section.id, 'down')}
                           disabled={index === sections.length - 1}
                         >
-                          <ArrowDown className="h-3 w-3" />
+                          <ArrowDown className="h-2 w-2 sm:h-3 sm:w-3" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
+                          className="h-6 w-6 sm:h-8 sm:w-8 p-0"
                           onClick={() => toggleSectionVisibility(section.id)}
                         >
-                          {section.isVisible ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+                          {section.isVisible ? <Eye className="h-2 w-2 sm:h-3 sm:w-3" /> : <EyeOff className="h-2 w-2 sm:h-3 sm:w-3" />}
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
+                          className="h-6 w-6 sm:h-8 sm:w-8 p-0"
                           onClick={() => setEditingSection(editingSection === section.id ? null : section.id)}
                         >
-                          <Edit className="h-3 w-3" />
+                          <Edit className="h-2 w-2 sm:h-3 sm:w-3" />
                         </Button>
                       </div>
                     </div>
                     
                     {editingSection === section.id && (
-                      <div className="space-y-3 pt-2 border-t">
+                      <div className="space-y-2 sm:space-y-3 pt-2 border-t">
                         <div>
-                          <Label htmlFor={`title-${section.id}`}>Title</Label>
+                          <Label htmlFor={`title-${section.id}`} className="text-xs sm:text-sm">Title</Label>
                           <Input
                             id={`title-${section.id}`}
                             value={section.title}
                             onChange={(e) => updateSection(section.id, { title: e.target.value })}
+                            className="h-8 sm:h-10 text-xs sm:text-sm"
                           />
                         </div>
                         <div>
-                          <Label htmlFor={`content-${section.id}`}>Content</Label>
+                          <Label htmlFor={`content-${section.id}`} className="text-xs sm:text-sm">Content</Label>
                           <Textarea
                             id={`content-${section.id}`}
                             value={section.content || ''}
                             onChange={(e) => updateSection(section.id, { content: e.target.value })}
-                            rows={3}
+                            rows={2}
+                            className="text-xs sm:text-sm"
                           />
                         </div>
                         <div>
-                          <Label htmlFor={`image-${section.id}`}>Image URL</Label>
+                          <Label htmlFor={`image-${section.id}`} className="text-xs sm:text-sm">Image URL</Label>
                           <Input
                             id={`image-${section.id}`}
                             value={section.imageUrl || ''}
                             onChange={(e) => updateSection(section.id, { imageUrl: e.target.value })}
                             placeholder="https://example.com/image.jpg"
+                            className="h-8 sm:h-10 text-xs sm:text-sm"
                           />
                         </div>
                       </div>
@@ -367,36 +386,36 @@ export default function WebsiteBuilder() {
           </div>
 
           {/* Preview Panel */}
-          <div className="lg:col-span-2">
+          <div className="xl:col-span-2">
             <Card>
-              <CardHeader>
-                <CardTitle>Live Preview</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base sm:text-lg">Live Preview</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className={`border rounded-lg overflow-hidden ${previewMode === 'mobile' ? 'max-w-md mx-auto' : ''}`}>
                   {/* Preview Content */}
                   <div className="bg-white min-h-screen">
                     {school && (
-                      <header className="bg-blue-600 text-white p-6">
-                        <h1 className="text-2xl font-bold">{school.name}</h1>
-                        <p className="text-blue-100">Excellence in Education</p>
+                      <header className="bg-blue-600 text-white p-3 sm:p-6">
+                        <h1 className="text-lg sm:text-2xl font-bold">{school.name}</h1>
+                        <p className="text-blue-100 text-xs sm:text-sm">Excellence in Education</p>
                       </header>
                     )}
                     
-                    <main className="p-6 space-y-12">
+                    <main className="p-3 sm:p-6 space-y-6 sm:space-y-12">
                       {sections.filter(s => s.isVisible).map(section => (
-                        <section key={section.id} className="space-y-4">
-                          <h2 className="text-2xl font-bold text-gray-900">{section.title}</h2>
+                        <section key={section.id} className="space-y-3 sm:space-y-4">
+                          <h2 className="text-lg sm:text-2xl font-bold text-gray-900">{section.title}</h2>
                           {section.imageUrl && (
                             <img 
                               src={section.imageUrl} 
                               alt={section.title}
-                              className="w-full h-48 object-cover rounded-lg"
+                              className="w-full h-32 sm:h-48 object-cover rounded-lg"
                             />
                           )}
                           {section.content && (
                             <div className="prose max-w-none">
-                              <p className="text-gray-600 whitespace-pre-wrap">{section.content}</p>
+                              <p className="text-gray-600 whitespace-pre-wrap text-xs sm:text-sm">{section.content}</p>
                             </div>
                           )}
                         </section>
@@ -404,9 +423,9 @@ export default function WebsiteBuilder() {
                     </main>
                     
                     {school && (
-                      <footer className="bg-gray-100 p-6 text-center text-gray-600">
-                        <p>&copy; 2024 {school.name}. All rights reserved.</p>
-                        <p className="text-sm mt-2">Powered by VidyaWebBuilder</p>
+                      <footer className="bg-gray-100 p-3 sm:p-6 text-center text-gray-600">
+                        <p className="text-xs sm:text-sm">&copy; 2024 {school.name}. All rights reserved.</p>
+                        <p className="text-xs mt-1 sm:mt-2">Powered by VidyaWebBuilder</p>
                       </footer>
                     )}
                   </div>

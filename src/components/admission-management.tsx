@@ -249,35 +249,38 @@ export default function AdmissionManagement() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" onClick={() => window.history.back()}>
-                ← Back
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Button variant="ghost" size="sm" onClick={() => window.history.back()}>
+                <X className="h-4 w-4 rotate-45" />
+                <span className="hidden sm:inline ml-2">Back</span>
               </Button>
-              <GraduationCap className="h-6 w-6 text-blue-600" />
-              <h1 className="text-xl font-semibold">Admission Management</h1>
+              <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+              <h1 className="text-lg sm:text-xl font-semibold">Admission Management</h1>
             </div>
             
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" onClick={exportEnquiries}>
-                <Download className="h-4 w-4 mr-2" />
-                Export Enquiries
+            <div className="flex items-center space-x-1 sm:space-x-2">
+              <Button variant="outline" size="sm" onClick={exportEnquiries}>
+                <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Export</span>
+                <span className="sm:hidden">CSV</span>
               </Button>
               <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button onClick={resetForm}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    New Session
+                  <Button size="sm" onClick={resetForm}>
+                    <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">New Session</span>
+                    <span className="sm:hidden">Add</span>
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[600px]">
+                <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>
-                      {editingAdmission ? 'Edit Admission Session' : 'Create New Admission Session'}
+                    <DialogTitle className="text-lg sm:text-xl">
+                      {editingAdmission ? 'Edit Session' : 'Create Session'}
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-sm">
                       {editingAdmission 
                         ? 'Update the admission session details.' 
                         : 'Create a new admission session to start collecting enquiries.'
@@ -287,13 +290,14 @@ export default function AdmissionManagement() {
                   
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="session">Academic Session *</Label>
+                      <Label htmlFor="session" className="text-sm">Academic Session *</Label>
                       <Input
                         id="session"
                         value={formData.session}
                         onChange={(e) => setFormData(prev => ({ ...prev, session: e.target.value }))}
                         placeholder="e.g., 2024-2025"
                         required
+                        className="h-9 sm:h-10"
                       />
                     </div>
                     
@@ -303,34 +307,36 @@ export default function AdmissionManagement() {
                         checked={formData.isOpen}
                         onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isOpen: checked }))}
                       />
-                      <Label htmlFor="isOpen">
+                      <Label htmlFor="isOpen" className="text-sm">
                         Admissions are currently open
                       </Label>
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="eligibility">Eligibility Criteria</Label>
+                      <Label htmlFor="eligibility" className="text-sm">Eligibility Criteria</Label>
                       <Textarea
                         id="eligibility"
                         value={formData.eligibility}
                         onChange={(e) => setFormData(prev => ({ ...prev, eligibility: e.target.value }))}
                         placeholder="Enter eligibility requirements..."
-                        rows={4}
+                        rows={3}
+                        className="text-sm"
                       />
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="instructions">Admission Instructions</Label>
+                      <Label htmlFor="instructions" className="text-sm">Admission Instructions</Label>
                       <Textarea
                         id="instructions"
                         value={formData.instructions}
                         onChange={(e) => setFormData(prev => ({ ...prev, instructions: e.target.value }))}
                         placeholder="Enter admission process instructions..."
-                        rows={6}
+                        rows={4}
+                        className="text-sm"
                       />
                     </div>
                     
-                    <div className="flex justify-end space-x-2 pt-4">
+                    <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2 pt-4">
                       <Button 
                         type="button" 
                         variant="outline" 
@@ -338,11 +344,12 @@ export default function AdmissionManagement() {
                           setIsCreateDialogOpen(false)
                           resetForm()
                         }}
+                        className="w-full sm:w-auto"
                       >
                         Cancel
                       </Button>
-                      <Button type="submit">
-                        {editingAdmission ? 'Update Session' : 'Create Session'}
+                      <Button type="submit" className="w-full sm:w-auto">
+                        {editingAdmission ? 'Update' : 'Create'}
                       </Button>
                     </div>
                   </form>
@@ -354,11 +361,11 @@ export default function AdmissionManagement() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs defaultValue="sessions" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="sessions">Admission Sessions</TabsTrigger>
-            <TabsTrigger value="enquiries">Student Enquiries ({enquiries.length})</TabsTrigger>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <Tabs defaultValue="sessions" className="space-y-4 sm:space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="sessions" className="text-xs sm:text-sm">Sessions</TabsTrigger>
+            <TabsTrigger value="enquiries" className="text-xs sm:text-sm">Enquiries ({enquiries.length})</TabsTrigger>
           </TabsList>
           
           <TabsContent value="sessions" className="space-y-6">

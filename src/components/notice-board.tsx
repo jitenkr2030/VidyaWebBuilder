@@ -164,30 +164,32 @@ export default function NoticeBoard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" onClick={() => window.history.back()}>
-                ← Back
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Button variant="ghost" size="sm" onClick={() => window.history.back()}>
+                <X className="h-4 w-4 rotate-45" />
+                <span className="hidden sm:inline ml-2">Back</span>
               </Button>
-              <Megaphone className="h-6 w-6 text-blue-600" />
-              <h1 className="text-xl font-semibold">Digital Notice Board</h1>
+              <Megaphone className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+              <h1 className="text-lg sm:text-xl font-semibold">Digital Notice Board</h1>
             </div>
             
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
               <DialogTrigger asChild>
-                <Button onClick={resetForm}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Notice
+                <Button size="sm" onClick={resetForm}>
+                  <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">New Notice</span>
+                  <span className="sm:hidden">Add</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px]">
+              <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>
+                  <DialogTitle className="text-lg sm:text-xl">
                     {editingNotice ? 'Edit Notice' : 'Create New Notice'}
                   </DialogTitle>
-                  <DialogDescription>
+                  <DialogDescription className="text-sm">
                     {editingNotice 
                       ? 'Update the notice details below.' 
                       : 'Fill in the details to create a new notice.'
@@ -197,25 +199,27 @@ export default function NoticeBoard() {
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="title">Notice Title *</Label>
+                    <Label htmlFor="title" className="text-sm">Notice Title *</Label>
                     <Input
                       id="title"
                       value={formData.title}
                       onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                       placeholder="Enter notice title"
                       required
+                      className="h-9 sm:h-10"
                     />
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="content">Notice Content *</Label>
+                    <Label htmlFor="content" className="text-sm">Notice Content *</Label>
                     <Textarea
                       id="content"
                       value={formData.content}
                       onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
                       placeholder="Enter detailed notice content"
-                      rows={6}
+                      rows={4}
                       required
+                      className="text-sm"
                     />
                   </div>
                   
@@ -225,21 +229,21 @@ export default function NoticeBoard() {
                       checked={formData.isImportant}
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isImportant: checked }))}
                     />
-                    <Label htmlFor="important" className="flex items-center space-x-2">
-                      <AlertTriangle className="h-4 w-4 text-orange-500" />
-                      <span>Mark as Important Notice</span>
+                    <Label htmlFor="important" className="flex items-center space-x-2 text-sm">
+                      <AlertTriangle className="h-3 w-3 sm:h-4 sm:w-4 text-orange-500" />
+                      <span>Mark as Important</span>
                     </Label>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label>Expiry Date (Optional)</Label>
+                    <Label className="text-sm">Expiry Date (Optional)</Label>
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className="w-full justify-start text-left font-normal"
+                          className="w-full justify-start text-left font-normal h-9 sm:h-10"
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          <CalendarIcon className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                           {formData.expiryDate ? (
                             format(formData.expiryDate, "PPP")
                           ) : (
@@ -258,7 +262,7 @@ export default function NoticeBoard() {
                     </Popover>
                   </div>
                   
-                  <div className="flex justify-end space-x-2 pt-4">
+                  <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2 pt-4">
                     <Button 
                       type="button" 
                       variant="outline" 
@@ -266,12 +270,13 @@ export default function NoticeBoard() {
                         setIsCreateDialogOpen(false)
                         resetForm()
                       }}
+                      className="w-full sm:w-auto"
                     >
                       Cancel
                     </Button>
-                    <Button type="submit">
-                      <Save className="h-4 w-4 mr-2" />
-                      {editingNotice ? 'Update Notice' : 'Create Notice'}
+                    <Button type="submit" className="w-full sm:w-auto">
+                      <Save className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                      {editingNotice ? 'Update' : 'Create'}
                     </Button>
                   </div>
                 </form>
@@ -282,62 +287,62 @@ export default function NoticeBoard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Notices</p>
-                  <p className="text-2xl font-bold">{notices.length}</p>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600">Total Notices</p>
+                  <p className="text-xl sm:text-2xl font-bold">{notices.length}</p>
                 </div>
-                <Megaphone className="h-8 w-8 text-blue-600" />
+                <Megaphone className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
           
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Important Notices</p>
-                  <p className="text-2xl font-bold text-orange-600">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600">Important</p>
+                  <p className="text-xl sm:text-2xl font-bold text-orange-600">
                     {notices.filter(n => n.isImportant).length}
                   </p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-orange-600" />
+                <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600" />
               </div>
             </CardContent>
           </Card>
           
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Expired Notices</p>
-                  <p className="text-2xl font-bold text-red-600">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600">Expired</p>
+                  <p className="text-xl sm:text-2xl font-bold text-red-600">
                     {notices.filter(n => isExpired(n.expiryDate)).length}
                   </p>
                 </div>
-                <X className="h-8 w-8 text-red-600" />
+                <X className="h-6 w-6 sm:h-8 sm:w-8 text-red-600" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Notices List */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {notices.length === 0 ? (
             <Card>
-              <CardContent className="p-12 text-center">
-                <Megaphone className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No notices yet</h3>
-                <p className="text-gray-500 mb-4">
+              <CardContent className="p-6 sm:p-12 text-center">
+                <Megaphone className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+                <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">No notices yet</h3>
+                <p className="text-xs sm:text-sm text-gray-500 mb-4">
                   Create your first notice to start communicating with students and parents.
                 </p>
-                <Button onClick={() => setIsCreateDialogOpen(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
+                <Button onClick={() => setIsCreateDialogOpen(true)} className="w-full sm:w-auto">
+                  <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                   Create First Notice
                 </Button>
               </CardContent>
@@ -354,49 +359,54 @@ export default function NoticeBoard() {
                     : ''
                 }`}
               >
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <CardTitle className="text-lg">{notice.title}</CardTitle>
-                        {notice.isImportant && (
-                          <Badge variant="destructive" className="text-xs">
-                            <AlertTriangle className="h-3 w-3 mr-1" />
-                            Important
-                          </Badge>
-                        )}
-                        {isExpired(notice.expiryDate) && (
-                          <Badge variant="secondary" className="text-xs">
-                            <X className="h-3 w-3 mr-1" />
-                            Expired
-                          </Badge>
-                        )}
+                <CardHeader className="pb-2 sm:pb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                        <CardTitle className="text-base sm:text-lg truncate">{notice.title}</CardTitle>
+                        <div className="flex flex-wrap gap-1">
+                          {notice.isImportant && (
+                            <Badge variant="destructive" className="text-xs">
+                              <AlertTriangle className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
+                              Important
+                            </Badge>
+                          )}
+                          {isExpired(notice.expiryDate) && (
+                            <Badge variant="secondary" className="text-xs">
+                              <X className="h-2 w-2 sm:h-3 sm:w-3 mr-1" />
+                              Expired
+                            </Badge>
+                          )}
+                        </div>
                       </div>
-                      <CardDescription className="text-sm">
-                        Posted on {format(new Date(notice.createdAt), 'PPP')}
-                        {notice.expiryDate && (
-                          <span className="ml-4">
-                            Expires on {format(new Date(notice.expiryDate), 'PPP')}
-                          </span>
-                        )}
+                      <CardDescription className="text-xs sm:text-sm">
+                        <div className="flex flex-col sm:flex-row gap-1 sm:gap-4">
+                          <span>Posted: {format(new Date(notice.createdAt), 'PP')}</span>
+                          {notice.expiryDate && (
+                            <span>Expires: {format(new Date(notice.expiryDate), 'PP')}</span>
+                          )}
+                        </div>
                       </CardDescription>
                     </div>
                     
-                    <div className="flex items-center space-x-2 ml-4">
+                    <div className="flex items-center space-x-1 sm:space-x-2">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleEdit(notice)}
+                        className="h-8 w-8 sm:h-auto sm:w-auto p-0 sm:p-2"
                       >
-                        <Edit className="h-4 w-4" />
+                        <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <span className="hidden sm:inline ml-1">Edit</span>
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDelete(notice.id)}
-                        className="text-red-600 hover:text-red-700"
+                        className="text-red-600 hover:text-red-700 h-8 w-8 sm:h-auto sm:w-auto p-0 sm:p-2"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <span className="hidden sm:inline ml-1">Delete</span>
                       </Button>
                     </div>
                   </div>
@@ -404,7 +414,7 @@ export default function NoticeBoard() {
                 
                 <CardContent>
                   <div className="prose max-w-none">
-                    <p className="text-gray-700 whitespace-pre-wrap">{notice.content}</p>
+                    <p className="text-gray-700 whitespace-pre-wrap text-xs sm:text-sm">{notice.content}</p>
                   </div>
                 </CardContent>
               </Card>
